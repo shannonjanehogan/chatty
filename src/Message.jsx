@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 
-const Message = React.createClass ({
+const Message = React.createClass({
   render() {
+    console.log("Rendering <Message/>");
     return (
       <div className="message-body">
-      <span className="user"> Anonymous </span>
-      <span className="message" >I wont be impressed with technology until I can download food. </span>
+        <span className="user"> {this.props.message.username} </span>
+        <span className="message" > {this.props.message.content} </span>
       </div>
     );
   }

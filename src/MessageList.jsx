@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
+import Message from './Message.jsx';
 
-const MessageList = React.createClass ({
+const MessageList = React.createClass({
   render() {
+    console.log("Rendering <MessageList/>");
     return (
-      <footer className = "input-bar">
-        <input className = "username" placeholder="Enter username here (optional)"/>
-        <input className = "message" placeholder="Type a message and hit enter"/>
-      </footer>
+     <div className="message-list">
+      {
+        this.props.messages.map(function(message, key) {
+          return <Message key={key} message={message} id={message.id} />;
+        })
+      }
+      </div>
     );
   }
 });
