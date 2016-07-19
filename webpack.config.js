@@ -2,6 +2,9 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+  watchOptions: {
+    poll: 1500
+  },
   devtool: 'eval',
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
