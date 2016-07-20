@@ -27,6 +27,7 @@ const App = React.createClass ({
     console.log("componentDidMount <App />");
     setTimeout(() => {
       console.log("Simulating incoming message");
+
       // Add a new message to the list of messages in the data store
       this.state.messages.push({id: 3, username: "Michelle", content: "Hello there!"});
       // Update the state of the app component. This will call render()
@@ -34,7 +35,7 @@ const App = React.createClass ({
   }, 3000);
 },
   _onNewMessage: function(new_message) {
-    this.state.messages.push({id: 4, username: "wut", content: new_message});
+    this.state.messages.push({id: 4, username: "Raf", content: new_message});
     this.setState({data: this.state.data})
   },
   render: function() {

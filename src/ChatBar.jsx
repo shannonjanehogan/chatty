@@ -14,22 +14,27 @@ const ChatBar = React.createClass({
     return {new_message: ''};
   },
   _handleChange: function(event) {
+    console.log("event", event.target);
     this.setState({new_message: event.target.value});
   },
   _onSubmit: function(event) {
     if (event.charCode == 13) {
       console.debug(event);
       this.props.onNewMessage(this.state.new_message);
+      this.setState({new_message: ''});
     }
   },
   render: function() {
     return (
-      <input
-        type="text"
-        onKeyPress={(event) => this._onSubmit(event)}
-        value={this.state.new_message}
-        onChange={this._handleChange}
-      />
+      <footer className="input-bar">
+        <input className="username" placeholder="Enter username here (optional)" value={this.props.username}/>
+        <input
+          type="text"
+          onKeyPress={this._onSubmit}
+          value={this.state.new_message}
+          onChange={this._handleChange}
+        />
+      </footer>
     );
   }
 });
