@@ -6,7 +6,7 @@ const Message = React.createClass({
     return (
       <div className="message-body">
         <span className="user"> {this.props.message.username} </span>
-        <span className="message" > {this.props.message.content} </span>
+        <span className="message" > {this.props.message.message} </span>
       </div>
     );
   }
