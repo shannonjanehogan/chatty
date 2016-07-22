@@ -13,18 +13,19 @@ const server = express()
   .use(express.static('public'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-
 // Create the WebSockets server
 const wss = new SocketServer({ server });
-
 
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (socket) => {
+  broadcast(JSON.stringify({
+    numberOfClients: wss.clients.length,
+    type: "clientNotification"
+  }));
   console.log('Client connected');
-
 
   socket.on('message', function incoming(msg) {
     let message = JSON.parse(msg);
@@ -32,28 +33,22 @@ wss.on('connection', (socket) => {
       case "postMessage":
         message.id = uuid.v4()
         message.type = "incomingMessage"
-        console.log('Just received a message', message);
-        // socket.send(JSON.stringify(message));
         broadcast(JSON.stringify(message));
+        break;
       case "postNotification":
-        massage.type = "incomingNotification"
+        message.type = "incomingNotification"
         broadcast(JSON.stringify(message));
+        break;
     }
   });
 
   function broadcast(data) {
   wss.clients.forEach((client) => {
-    console.log("Broadcasting: ", data);
     client.send(data);
   });
 };
-  // socket.broadcast = function broadcast(message) {
-  //   console.log("broadcast", message);
-  //   socket.clients.forEach(function each(client) {
-  //     client.send(JSON.strindata);
-  //   });
-  // };
 
   // Set up a callback for when a client closes the socket. This usually means they closed their brosocketer.
-  socket.on('close', () => console.log('Client disconnected'));
+  socket.on('close', () =>
+    console.log('Client disconnected'));
 });
