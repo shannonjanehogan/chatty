@@ -28,10 +28,17 @@ wss.on('connection', (socket) => {
 
   socket.on('message', function incoming(msg) {
     let message = JSON.parse(msg);
-    message.id = uuid.v4()
-    console.log('Just received a message', message);
-    // socket.send(JSON.stringify(message));
-    broadcast(JSON.stringify(message));
+    switch (message.type) {
+      case "postMessage":
+        message.id = uuid.v4()
+        message.type = "incomingMessage"
+        console.log('Just received a message', message);
+        // socket.send(JSON.stringify(message));
+        broadcast(JSON.stringify(message));
+      case "postNotification":
+        massage.type = "incomingNotification"
+        broadcast(JSON.stringify(message));
+    }
   });
 
   function broadcast(data) {
@@ -40,6 +47,12 @@ wss.on('connection', (socket) => {
     client.send(data);
   });
 };
+  // socket.broadcast = function broadcast(message) {
+  //   console.log("broadcast", message);
+  //   socket.clients.forEach(function each(client) {
+  //     client.send(JSON.strindata);
+  //   });
+  // };
 
   // Set up a callback for when a client closes the socket. This usually means they closed their brosocketer.
   socket.on('close', () => console.log('Client disconnected'));

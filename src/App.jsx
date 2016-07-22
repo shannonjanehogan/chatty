@@ -28,7 +28,7 @@ let socket = new WebSocket("ws://localhost:4000");
 let data = {
       currentUser: {name: "Bob"},
       messages: [] // messages coming from the server will be stored here as they arrive
-    };
+};
 
 const App = React.createClass ({
   getInitialState: function() {
@@ -37,30 +37,38 @@ const App = React.createClass ({
     return {data: data};
   },
   componentDidMount: function() {
-    // socket.onopen = function open() {
-    //   console.log("in open");
-    //   var greeting = {type: "greeting", message: "Hello from Chrome"}
-    //   socket.send(JSON.stringify(greeting));
-    // };
     socket.onmessage = (message) => {
-      this.state.data.messages.push(JSON.parse(message.data));
-      this.setState({data: this.state.data});
-      console.log('message', JSON.parse(message.data));
-      console.log(this.state.data.messages)
+      const data = JSON.parse(message.data)
+      switch(data.type) {
+        case "incomingMessage":
+          console.log("message.data.message", message.data.message)
+          console.log("message.data", message.data)
+          this.state.data.messages.push(JSON.parse(message.data).message)
+          this.state.data.currentUser[name] = (JSON.parse(message.data).username)
+          // this.state.data.messages.push(JSON.parse(message.data));
+          // this.state.data.currentUser.push(JSON.parse(message.data));
+          this.setState({data: this.state.data});
+          console.log('message', JSON.parse(message.data));
+          console.log('here!', this.state.data.messages)
+          break;
+        case "incomingNotification":
+          alert(data.content)
+
+          break;
+        default:
+          throw new Error("Unknown event type " + data.type);
+      }
     }
-
     console.log("componentDidMount <App />");
-  //   setTimeout(() => {
-  //     console.log("Simulating incoming message");
-
-  //     // Add a new message to the list of messages in the data store
-  //     this.state.messages.push({id: 3, username: "Michelle", content: "Hello there!"});
-  //     // Update the state of the app component. This will call render()
-  //     this.setState({data: this.state.data})
-  // }, 3000);
-},
-  _onNewMessage: function(new_message) {
-    socket.send(JSON.stringify({username: "Bob", message: new_message}));
+  },
+  _onNewMessage: function(new_message, new_username) {
+    socket.send(JSON.stringify({type: "postMessage", username: new_username, message: new_message}));
+    // this.state.messages.push({id: 4, username: "Raf", content: new_message});
+    // this.setState({data: this.state.data})
+  },
+  _onNewUsername: function (old_username, new_username) {
+    socket.send(JSON.stringify({type: "postNotification",
+      content: `${old_username} has changed their name to ${new_username}`}));
     // this.state.messages.push({id: 4, username: "Raf", content: new_message});
     // this.setState({data: this.state.data})
   },
@@ -71,11 +79,12 @@ const App = React.createClass ({
        <nav> <h1> Chatty </h1> </nav>
         <MessageList
           messages={this.state.data.messages}
-          />
+        />
         <ChatBar
           onNewMessage={this._onNewMessage}
-          username={data.currentUser.name}
-          />
+          username={this.state.data.currentUser.name}
+          onNewUsername={this._onNewUsername}
+        />
       </div>
     );
   }

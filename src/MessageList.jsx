@@ -5,13 +5,14 @@ const MessageList = React.createClass({
   render() {
     console.log("Rendering <MessageList/>");
     return (
-     <div className="message-list">
-      {
-        this.props.messages.map(function(message, key) {
-          return <Message key={key} message={message} id={message.id} />;
-        })
-      }
-      </div>
+        <div className="message-list">
+
+        {
+          this.props.messages.map(function(message, key) {
+            return <Message key={key} message={message} id={message.id} />;
+          })
+        }
+        </div>
     );
   }
 });
