@@ -3,10 +3,9 @@ import React, {Component} from 'react';
 const ChatBar = React.createClass({
 
   getInitialState: function() {
-
     return {new_message: '', username: this.props.username};
   },
-  _handleChange: function(event) {
+  _handleMessageChange: function(event) {
     this.setState({new_message: event.target.value});
   },
    _handleUserChange: function(event) {
@@ -17,7 +16,7 @@ const ChatBar = React.createClass({
       this.props.onNewUsername(this.props.username, this.state.username);
     }
   },
-  _onSubmit: function(event) {
+  _onMessageSubmit: function(event) {
     if (event.charCode == 13) {
       this.props.onNewMessage(this.state.new_message, this.state.username);
       this.setState({new_message: ''});
@@ -34,9 +33,9 @@ const ChatBar = React.createClass({
         />
         <input
           type="text"
-          onKeyPress={this._onSubmit}
+          onKeyPress={this._onMessageSubmit}
           value={this.state.new_message}
-          onChange={this._handleChange}
+          onChange={this._handleMessageChange}
         />
       </footer>
     );

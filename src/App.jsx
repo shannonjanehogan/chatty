@@ -39,7 +39,8 @@ const App = React.createClass ({
     socket.send(JSON.stringify({
       type: "postMessage",
       username: new_username,
-      message: new_message}));
+      message: new_message
+    }));
   },
   _onNewUsername: function (old_username, new_username) {
     socket.send(JSON.stringify({
